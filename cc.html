@@ -1,118 +1,162 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carte Lycéen</title>
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f0f0f0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-#cameraContainer, #cardContainer {
-    width: 90%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-video {
-    width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-button {
-    margin-top: 15px;
-    padding: 15px 25px;
-    font-size: 18px;
-    background: #0078d4;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    width: 80%;
-    max-width: 300px;
-}
-button:active { background: #005fa3; }
-img {
-    width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carte Lycéen</title>
+  <style>
+    @font-face {
+      font-family: 'agrandir';
+      src: url(Agrandir-Regular.otf) format('opentype');
+    }
+
+    body {
+      font-family: 'agrandir', sans-serif;
+      background: #DBFCFF;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #cameraContainer, #cardContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    video {
+      width: 90%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #62C370;
+      color: white;
+      font-weight: bold;
+      transition: 0.2s;
+      margin: 5px;
+    }
+
+    button:hover {
+      background-color: #4CAF50;
+    }
+
+    #cardContainer img {
+      width: 95vw;
+      height: auto;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+      margin-bottom: 20px;
+    }
+
+    #clearCard {
+      background-color: #E56399;
+    }
+
+    #clearCard:hover {
+      background-color: #c94a80;
+    }
+
+    #backMenu {
+      background-color: #7F96FF;
+    }
+
+    #backMenu:hover {
+      background-color: #637de6;
+    }
+  </style>
 </head>
 <body>
-
-<div id="cameraContainer">
+  <div id="cameraContainer">
     <video id="video" autoplay playsinline></video>
-    <button id="takePhoto">Prendre la photo</button>
-</div>
+    <button id="capture">Prendre la photo</button>
+  </div>
 
-<div id="cardContainer"></div>
-<button id="clearCard" style="display:none;">Supprimer la carte</button>
+  <div id="cardContainer" style="display: none;"></div>
+  <div id="buttonsContainer" style="display:none;">
+    <button id="backMenu">Retour au menu</button>
+    <button id="clearCard">Supprimer la carte</button>
+  </div>
 
-<script>
-const video = document.getElementById('video');
-const cameraContainer = document.getElementById('cameraContainer');
-const takePhotoBtn = document.getElementById('takePhoto');
-const cardContainer = document.getElementById('cardContainer');
-const clearBtn = document.getElementById('clearCard');
-const canvas = document.createElement('canvas');
+  <canvas id="canvas" style="display: none;"></canvas>
 
-// Fonction pour afficher la carte si elle existe
-function afficherCarte() {
-    const data = localStorage.getItem("carteCantine");
-    if(data){
-        cameraContainer.style.display = "none";
-        cardContainer.innerHTML = `<img src="${data}">`;
-        clearBtn.style.display = "block";
+  <script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const captureBtn = document.getElementById("capture");
+    const cardContainer = document.getElementById("cardContainer");
+    const cameraContainer = document.getElementById("cameraContainer");
+    const clearBtn = document.getElementById("clearCard");
+    const backMenuBtn = document.getElementById("backMenu");
+    const buttonsContainer = document.getElementById("buttonsContainer");
+
+    // Vérifie si une carte est déjà stockée
+    const savedCard = localStorage.getItem("carteCantine");
+    if (savedCard) {
+      afficherCarte(savedCard);
     } else {
-        cameraContainer.style.display = "flex";
-        clearBtn.style.display = "none";
+      lancerCamera();
     }
-}
 
-// Accéder à la caméra arrière si aucune carte n'existe
-if(!localStorage.getItem("carteCantine")){
-    navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: { exact: "environment" } } 
-    })
-    .then(stream => { video.srcObject = stream; })
-    .catch(err => { 
-        console.error("Impossible d'accéder à la caméra arrière, on essaie la caméra par défaut", err); 
-        // fallback vers caméra par défaut
-        navigator.mediaDevices.getUserMedia({ video: true })
+    function lancerCamera() {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(stream => { video.srcObject = stream; })
+        .catch(() => {
+          navigator.mediaDevices.getUserMedia({ video: true })
             .then(stream => { video.srcObject = stream; })
-            .catch(err => { console.error("Impossible d'accéder à la caméra", err); });
+            .catch(() => {
+              cameraContainer.innerHTML = "<p>Impossible d'accéder à la caméra.</p>";
+            });
+        });
+    }
+
+    captureBtn.addEventListener("click", () => {
+      const context = canvas.getContext("2d");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+      localStorage.setItem("carteCantine", dataURL);
+      afficherCarte(dataURL);
     });
-}
 
+    clearBtn.addEventListener("click", () => {
+      localStorage.removeItem("carteCantine");
+      location.reload();
+    });
 
-// Prendre la photo
-takePhotoBtn.addEventListener('click', () => {
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext('2d').drawImage(video, 0, 0);
-    const dataURL = canvas.toDataURL('image/png');
-    localStorage.setItem("carteCantine", dataURL);
-    afficherCarte();
-});
+    backMenuBtn.addEventListener("click", () => {
+      cardContainer.style.display = "none";
+      buttonsContainer.style.display = "none";
+      cameraContainer.style.display = "flex";
+      lancerCamera();
+    });
 
-// Supprimer la carte
-clearBtn.addEventListener('click', () => {
-    localStorage.removeItem("carteCantine");
-    afficherCarte();
-});
-
-// Afficher au chargement
-afficherCarte();
-</script>
-
+    function afficherCarte(dataURL) {
+      cameraContainer.style.display = "none";
+      cardContainer.style.display = "flex";
+      buttonsContainer.style.display = "flex";
+      cardContainer.innerHTML = `<img src="${dataURL}" alt="Carte Lycéen">`;
+    }
+  </script>
 </body>
 </html>
