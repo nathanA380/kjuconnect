@@ -78,12 +78,21 @@ function afficherCarte() {
     }
 }
 
-// Accéder à la caméra si aucune carte n'existe
+// Accéder à la caméra arrière si aucune carte n'existe
 if(!localStorage.getItem("carteLyceen")){
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => { video.srcObject = stream; })
-        .catch(err => { console.error("Impossible d'accéder à la caméra", err); });
+    navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: { exact: "environment" } } 
+    })
+    .then(stream => { video.srcObject = stream; })
+    .catch(err => { 
+        console.error("Impossible d'accéder à la caméra arrière, on essaie la caméra par défaut", err); 
+        // fallback vers caméra par défaut
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err => { console.error("Impossible d'accéder à la caméra", err); });
+    });
 }
+
 
 // Prendre la photo
 takePhotoBtn.addEventListener('click', () => {
