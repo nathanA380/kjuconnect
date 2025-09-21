@@ -18,19 +18,15 @@
     font-family: 'agrandir', sans-serif;
     background: #DBFCFF;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow: hidden;
   }
 
-  /* Photo en plein écran */
   #photoContainer {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -43,7 +39,6 @@
     object-fit: contain;
   }
 
-  /* Bouton flottant */
   #takePhoto {
     position: absolute;
     z-index: 10;
@@ -55,14 +50,10 @@
     cursor: pointer;
     background: #62C370;
     color: #fff;
-    transition: 0.2s;
   }
 
-  #takePhoto:hover {
-    background: #4CAF50;
-  }
+  #takePhoto:hover { background: #4CAF50; }
 
-  /* Navbar fixe en bas */
   .navbar {
     position: fixed;
     bottom: 0;
@@ -87,84 +78,58 @@
     font-size: 14px;
   }
 
-  .navbar a span {
-    font-size: 20px;
-    margin-bottom: 3px;
-  }
-
+  .navbar a span { font-size: 20px; margin-bottom: 3px; }
   .navbar a:hover { color: #62C370; }
 
 </style>
 </head>
 <body>
 
-<!-- Bouton pour déclencher la caméra -->
 <button id="takePhoto">📸 Prendre ma Carte Lycéen</button>
-
-<!-- Container pour afficher la photo en plein écran -->
 <div id="photoContainer"></div>
-
-<!-- Input caméra natif caché -->
 <input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none;">
 
-<!-- Navbar fixe -->
 <div class="navbar">
-    <a href="cl.html"><span>🎓</span>Carte Lycéen</a>
-    <a href="cc.html"><span>🍽️</span>Carte Cantine</a>
-    <a href="#" onclick="openPronote()"><span>📚</span>EDT / Pronote</a>
-    <a href="soon.html"><span>📝</span>Mémos</a>
+  <a href="cl.html"><span>🎓</span>Carte Lycéen</a>
+  <a href="cc.html"><span>🍽️</span>Carte Cantine</a>
+  <a href="#" onclick="openPronote()"><span>📚</span>EDT / Pronote</a>
+  <a href="soon.html"><span>📝</span>Mémos</a>
 </div>
 
 <script>
-// Récupération des éléments
 const cameraInput = document.getElementById("cameraInput");
 const takePhotoBtn = document.getElementById("takePhoto");
 const photoContainer = document.getElementById("photoContainer");
+const storageKey = "carteLyceen";
 
 // Ouvre la caméra native
-takePhotoBtn.addEventListener("click", () => {
-  cameraInput.click();
-});
+takePhotoBtn.addEventListener("click", () => cameraInput.click());
 
 // Quand la photo est prise
 cameraInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
   if(file){
     const reader = new FileReader();
-    reader.onload = function(e){
+    reader.onload = e => {
       const dataURL = e.target.result;
-
-      // Stocke la photo pour toujours
-      localStorage.setItem("carteLycéen", dataURL);
-
-      // Affiche la photo
-      afficherPhoto(dataURL);
-
-      // Cache le bouton
+      localStorage.setItem(storageKey, dataURL);
+      photoContainer.innerHTML = `<img src="${dataURL}">`;
       takePhotoBtn.style.display = "none";
-    }
+    };
     reader.readAsDataURL(file);
   }
 });
 
-// Fonction pour afficher la photo
-function afficherPhoto(dataURL){
-  photoContainer.innerHTML = "";
-  const img = document.createElement("img");
-  img.src = dataURL;
-  photoContainer.appendChild(img);
-}
-
 // Vérifie si une photo existe déjà au chargement
 window.addEventListener("load", () => {
-  const saved = localStorage.getItem("carteLycéen");
+  const saved = localStorage.getItem(storageKey);
   if(saved){
-    afficherPhoto(saved);
+    photoContainer.innerHTML = `<img src="${saved}">`;
     takePhotoBtn.style.display = "none";
   }
 });
 
-// Fonction pour ouvrir Pronote
+// Ouvre Pronote
 function openPronote() {
   let opened = false;
   window.location = "pronote://";
