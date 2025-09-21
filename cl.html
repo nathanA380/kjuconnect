@@ -20,35 +20,16 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-  }
-
-  #cameraContainer, #cardContainer {
-    flex: 1;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    position: relative;
-    width: 100%;
-    height: 100%;
+    justify-content: center;
   }
 
-  video, #cardContainer img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  #photoContainer img {
+    width: 90%;
+    max-width: 400px;
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-
-  /* Boutons flottants */
-  #buttonsContainer {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 15px;
-    z-index: 10;
+    margin-top: 20px;
   }
 
   button {
@@ -58,14 +39,13 @@
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    background: #62C370;
+    color: #fff;
     transition: 0.2s;
+    margin-top: 15px;
   }
 
-  #capture { background: #62C370; color: #fff; }
-  #capture:hover { background: #4CAF50; }
-
-  #backMenu { background: #7F96FF; color: #fff; }
-  #backMenu:hover { background: #637de6; }
+  button:hover { background: #4CAF50; }
 
   /* Navbar fixe en bas */
   .navbar {
@@ -98,23 +78,17 @@
   }
 
   .navbar a:hover { color: #62C370; }
-
 </style>
 </head>
 <body>
 
-<div id="cameraContainer">
-  <video id="video" autoplay playsinline></video>
-  <div id="buttonsContainer">
-    <button id="capture">📸 Prendre photo</button>
-  </div>
-</div>
+<h2>📸 Prendre votre Carte Lycéen</h2>
+<!-- Input caméra natif caché -->
+<input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none;">
+<!-- Bouton pour déclencher la caméra -->
+<button id="takePhoto">Prendre photo</button>
 
-<div id="cardContainer" style="display:none; flex-direction: column; justify-content: center; align-items: center;">
-  <button id="backMenu">🏠 Retour au menu</button>
-
-<canvas id="canvas" style="display:none;"></canvas>
-</div>
+<div id="photoContainer"></div>
 
 <!-- Navbar fixe -->
 <div class="navbar">
@@ -125,61 +99,48 @@
 </div>
 
 <script>
-const video = document.getElementById("video");
-const canvas = document.getElementById("canvas");
-const captureBtn = document.getElementById("capture");
-const cardContainer = document.getElementById("cardContainer");
-const cameraContainer = document.getElementById("cameraContainer");
-const backMenuBtn = document.getElementById("backMenu");
+// Récupération des éléments
+const cameraInput = document.getElementById("cameraInput");
+const takePhotoBtn = document.getElementById("takePhoto");
+const photoContainer = document.getElementById("photoContainer");
 
-function init() {
-  const savedCard = localStorage.getItem("carteLycéen");
+// Quand on clique sur le bouton, on ouvre la caméra native
+takePhotoBtn.addEventListener("click", () => {
+  cameraInput.click();
+});
 
-  if(savedCard){
-    captureBtn.style.display = "none";
-    afficherCarte(savedCard);
-  } else {
-    captureBtn.style.display = "inline-block";
-    lancerCamera();
+// Quand l'utilisateur prend une photo
+cameraInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      // Stocke la photo dans localStorage
+      localStorage.setItem("carteLycéen", e.target.result);
+
+      // Affiche la photo
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      photoContainer.innerHTML = "";
+      photoContainer.appendChild(img);
+
+      // Cache le bouton pour ne plus pouvoir reprendre la photo
+      takePhotoBtn.style.display = "none";
+    }
+    reader.readAsDataURL(file);
   }
-}
-
-function lancerCamera() {
-  cameraContainer.style.display = "flex";
-  cardContainer.style.display = "none";
-
-  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-    .then(stream => video.srcObject = stream)
-    .catch(() => {
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => video.srcObject = stream)
-        .catch(() => {
-          cameraContainer.innerHTML = "<p style='padding:20px;text-align:center;'>Impossible d'accéder à la caméra.</p>";
-        });
-    });
-}
-
-captureBtn.addEventListener("click", () => {
-  const context = canvas.getContext("2d");
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  const dataURL = canvas.toDataURL("image/jpeg", 0.8);
-  localStorage.setItem("carteLycéen", dataURL);
-  captureBtn.style.display = "none";
-  afficherCarte(dataURL);
 });
 
-backMenuBtn.addEventListener("click", () => {
-  window.location.href = "index.html";
+// Si une photo est déjà enregistrée, on l'affiche directement
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem("carteLycéen");
+  if(saved){
+    const img = document.createElement("img");
+    img.src = saved;
+    photoContainer.appendChild(img);
+    takePhotoBtn.style.display = "none";
+  }
 });
-
-function afficherCarte(dataURL) {
-  cardContainer.innerHTML = `<img src="${dataURL}" alt="Carte Lycéen">`;
-  cardContainer.appendChild(backMenuBtn);
-  cardContainer.style.display = "flex";
-  cameraContainer.style.display = "none";
-}
 
 function openPronote() {
   let opened = false;
@@ -188,9 +149,6 @@ function openPronote() {
     if(!opened) window.location = "https://0330023w.index-education.net/pronote/eleve.html";
   }, 500);
 }
-
-// Lancement
-init();
 </script>
 
 </body>
