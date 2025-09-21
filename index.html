@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KJU Connect</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+.container { max-width: 500px; margin: auto; }
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+}
+.card h2 { margin-top: 0; }
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.btn:active { background: #005fa3; }
+img { max-width: 100px; margin: 10px; border:1px solid #ccc; border-radius:5px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Carte Lycéen -->
+    <div class="card">
+        <h2>Carte Lycéen</h2>
+        <button class="btn" onclick="window.location.href='cl.html'">View Card</button>
+    </div>
+
+    <!-- Carte Cantine / Restaurant -->
+    <div class="card">
+        <h2>Carte de Cantine</h2>
+        <button class="btn" onclick="window.location.href='cc.html'">View Card</button>
+    </div>
+
+    <!-- EDT / Pronote -->
+    <div class="card">
+        <h2>EDT / Pronote</h2>
+        <p>Accédez à vos notes, emploi du temps et devoirs.</p>
+        <button class="btn" onclick="openPronote()">Ouvrir Pronote</button>
+    </div>
+
+    <!-- Stockage de 3 images -->
+    <div class="card">
+        <h2>Mes mémos</h2>
+        <button class="btn" onclick="window.location.href='memo.html'">Gérer mes mémos</button>
+    </div>
+
+</div>
+
+<script>
+// Fonction pour tenter d'ouvrir l'app Pronote
+function openPronote() {
+    let opened = false;
+    window.location = "pronote://";
+    setTimeout(() => {
+        if(!opened) window.location = "https://0330023w.index-education.net/pronote/eleve.html";
+    }, 500);
+}
+
+
+
+// Ouvrir ou créer la DB
+let db;
+const request = indexedDB.open("KJUConnectDB", 1);
+
+request.onerror = function(event) {
+    console.error("Erreur IndexedDB", event);
+};
+
+request.onsuccess = function(event) {
+    db = event.target.result;
+    afficherImages();
+};
+
+request.onupgradeneeded = function(event) {
+    db = event.target.result;
+    const objectStore = db.createObjectStore("images", { keyPath: "id", autoIncrement: true });
+    objectStore.createIndex("data", "data", { unique: false });
+};
+
+// Ajouter image
+document.getElementById("fileInput").addEventListener("change", function(e){
+const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(){
+        const transaction = db.transaction(["images"], "readwrite");
+        const store = transaction.objectStore("images");
+        store.add({ data: reader.result });
+        transaction.oncomplete = () => afficherImages();
+    }
+    reader.readAsDataURL(file);
+});
+
+// Afficher images
+function afficherImages(){
+    const container = document.getElementById("images");
+    container.innerHTML = "";
+    const transaction = db.transaction(["images"], "readonly");
+    const store = transaction.objectStore("images");
+    const request = store.openCursor();
+    request.onsuccess = function(event) {
+        const cursor = event.target.result;
+        if(cursor){
+            const img = document.createElement("img");
+            img.src = cursor.value.data;
+            container.appendChild(img);
+            cursor.continue();
+        }
+    }
+}
+
+// Supprimer toutes les images
+document.getElementById("clearImages").addEventListener("click", function(){
+    const transaction = db.transaction(["images"], "readwrite");
+    const store = transaction.objectStore("images");
+    store.clear().onsuccess = () => afficherImages();
+});
+</script>
+</body>
+</html>

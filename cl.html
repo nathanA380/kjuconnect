@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte Lycéen</title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+#cameraContainer, #cardContainer {
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+video {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+button {
+    margin-top: 15px;
+    padding: 15px 25px;
+    font-size: 18px;
+    background: #0078d4;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 80%;
+    max-width: 300px;
+}
+button:active { background: #005fa3; }
+img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+</style>
+</head>
+<body>
+
+<div id="cameraContainer">
+    <video id="video" autoplay playsinline></video>
+    <button id="takePhoto">Prendre la photo</button>
+</div>
+
+<div id="cardContainer"></div>
+<button id="clearCard" style="display:none;">Supprimer la carte</button>
+
+<script>
+const video = document.getElementById('video');
+const cameraContainer = document.getElementById('cameraContainer');
+const takePhotoBtn = document.getElementById('takePhoto');
+const cardContainer = document.getElementById('cardContainer');
+const clearBtn = document.getElementById('clearCard');
+const canvas = document.createElement('canvas');
+
+// Fonction pour afficher la carte si elle existe
+function afficherCarte() {
+    const data = localStorage.getItem("carteLyceen");
+    if(data){
+        cameraContainer.style.display = "none";
+        cardContainer.innerHTML = `<img src="${data}">`;
+        clearBtn.style.display = "block";
+    } else {
+        cameraContainer.style.display = "flex";
+        clearBtn.style.display = "none";
+    }
+}
+
+// Accéder à la caméra si aucune carte n'existe
+if(!localStorage.getItem("carteLyceen")){
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => { video.srcObject = stream; })
+        .catch(err => { console.error("Impossible d'accéder à la caméra", err); });
+}
+
+// Prendre la photo
+takePhotoBtn.addEventListener('click', () => {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    const dataURL = canvas.toDataURL('image/png');
+    localStorage.setItem("carteLyceen", dataURL);
+    afficherCarte();
+});
+
+// Supprimer la carte
+clearBtn.addEventListener('click', () => {
+    localStorage.removeItem("carteLyceen");
+    afficherCarte();
+});
+
+// Afficher au chargement
+afficherCarte();
+</script>
+
+</body>
+</html>
