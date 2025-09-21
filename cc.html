@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carte Cantine</title>
+<title>Redirection</title>
 <style>
   @font-face {
     font-family: 'agrandir';
@@ -20,124 +20,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
   }
 
-  #photoContainer {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #DBFCFF;
-  }
-
-  #photoContainer img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  #takePhoto {
-    position: absolute;
-    z-index: 10;
-    padding: 15px 25px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 30px;
-    border: none;
-    cursor: pointer;
-    background: #62C370;
-    color: #fff;
-  }
-
-  #takePhoto:hover { background: #4CAF50; }
-
-  .navbar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    background: rgba(255,255,255,0.9);
-    border-top: 3px solid #1c1c1c;
-    box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
-    padding: 10px 0;
-    z-index: 20;
-  }
-
-  .navbar a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  p {
+    font-size: 24px;
     color: #1c1c1c;
-    text-decoration: none;
     font-weight: bold;
-    font-size: 14px;
   }
-
-  .navbar a span { font-size: 20px; margin-bottom: 3px; }
-  .navbar a:hover { color: #62C370; }
-
 </style>
+<script>
+  // Remplace "soon.html" par le fichier ou l'URL vers laquelle tu veux rediriger
+  window.location.href = "soon.html";
+</script>
 </head>
 <body>
-
-<button id="takePhoto">📸 Prendre ma Carte Cantine</button>
-<div id="photoContainer"></div>
-<input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none;">
-
-<div class="navbar">
-  <a href="cl.html"><span>🎓</span>Carte Lycéen</a>
-  <a href="cc.html"><span>🍽️</span>Carte Cantine</a>
-  <a href="#" onclick="openPronote()"><span>📚</span>EDT / Pronote</a>
-  <a href="soon.html"><span>📝</span>Mémos</a>
-</div>
-
-<script>
-const cameraInput = document.getElementById("cameraInput");
-const takePhotoBtn = document.getElementById("takePhoto");
-const photoContainer = document.getElementById("photoContainer");
-const storageKey = "carteCantine";
-
-// Ouvre la caméra native
-takePhotoBtn.addEventListener("click", () => cameraInput.click());
-
-// Quand la photo est prise
-cameraInput.addEventListener("change", (event) => {
-  const file = event.target.files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = e => {
-      const dataURL = e.target.result;
-      localStorage.setItem(storageKey, dataURL);
-      photoContainer.innerHTML = `<img src="${dataURL}">`;
-      takePhotoBtn.style.display = "none";
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
-// Vérifie si une photo existe déjà au chargement
-window.addEventListener("load", () => {
-  const saved = localStorage.getItem(storageKey);
-  if(saved){
-    photoContainer.innerHTML = `<img src="${saved}">`;
-    takePhotoBtn.style.display = "none";
-  }
-});
-
-// Ouvre Pronote
-function openPronote() {
-  let opened = false;
-  window.location = "pronote://";
-  setTimeout(() => {
-    if(!opened) window.location = "https://0330023w.index-education.net/pronote/eleve.html";
-  }, 500);
-}
-</script>
-
+  <p>Redirection en cours…</p>
 </body>
 </html>
