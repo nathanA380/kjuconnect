@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fonctionnalité Bientôt</title>
+<style>
+  @font-face {
+    font-family: 'agrandir';
+    src: url(Agrandir-Regular.otf) format('opentype');
+  }
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'agrandir', sans-serif;
+    background: #DBFCFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    color: #7F96FF;
+    margin-bottom: 15px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: #1c1c1c;
+    margin-bottom: 30px;
+    max-width: 400px;
+  }
+
+  .emoji {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: bounce 1s infinite alternate;
+  }
+
+  @keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-15px); }
+  }
+
+  button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #62C370;
+    color: white;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    background: #4CAF50;
+  }
+</style>
+</head>
+<body>
+
+<div class="emoji">🚀</div>
+<h1>Hey !</h1>
+<p>On bosse dur pour toi…<br>Cette fonctionnalité débarque très bientôt !<br>Reste dans le coin, ça va valoir le coup 😎</p>
+<button onclick="window.location.href='index.html'">🏠 Retour au menu</button>
+
+</body>
+</html>

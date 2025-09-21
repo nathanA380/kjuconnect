@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte Cantine</title>
+<style>
+  @font-face {
+    font-family: 'agrandir';
+    src: url(Agrandir-Regular.otf) format('opentype');
+  }
+
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'agrandir', sans-serif;
+    background: #DBFCFF;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #cameraContainer, #cardContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  video, #cardContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  /* Boutons flottants */
+  #buttonsContainer {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 10;
+  }
+
+  button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  #capture { background: #62C370; color: #fff; }
+  #capture:hover { background: #4CAF50; }
+
+  #backMenu { background: #7F96FF; color: #fff; }
+  #backMenu:hover { background: #637de6; }
+
+  /* Navbar fixe en bas */
+  .navbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    border-top: 3px solid #1c1c1c;
+    box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
+    padding: 10px 0;
+    z-index: 1000;
+  }
+
+  .navbar a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #1c1c1c;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .navbar a span {
+    font-size: 20px;
+    margin-bottom: 3px;
+  }
+
+  .navbar a:hover { color: #62C370; }
+
+</style>
+</head>
+<body>
+
+<div id="cameraContainer">
+  <video id="video" autoplay playsinline></video>
+  <div id="buttonsContainer">
+    <button id="capture">📸 Prendre photo</button>
+  </div>
+</div>
+
+<div id="cardContainer" style="display:none;">
+  <button id="backMenu">⬅️ Retour menu</button>
+</div>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<!-- Navbar fixe -->
+<div class="navbar">
+    <a href="cl.html"><span>🎓</span>Carte Lycéen</a>
+    <a href="cc.html"><span>🍽️</span>Carte Cantine</a>
+    <a href="#" onclick="openPronote()"><span>📚</span>EDT / Pronote</a>
+    <a href="soon.html"><span>📝</span>Mémos</a>
+</div>
+
+<script>
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const captureBtn = document.getElementById("capture");
+const cardContainer = document.getElementById("cardContainer");
+const cameraContainer = document.getElementById("cameraContainer");
+const backMenuBtn = document.getElementById("backMenu");
+
+function init() {
+  const savedCard = localStorage.getItem("carteCantine");
+
+  if(savedCard){
+    captureBtn.style.display = "none";
+    afficherCarte(savedCard);
+  } else {
+    captureBtn.style.display = "inline-block";
+    lancerCamera();
+  }
+}
+
+function lancerCamera() {
+  cameraContainer.style.display = "flex";
+  cardContainer.style.display = "none";
+
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+    .then(stream => video.srcObject = stream)
+    .catch(() => {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => video.srcObject = stream)
+        .catch(() => {
+          cameraContainer.innerHTML = "<p style='padding:20px;text-align:center;'>Impossible d'accéder à la caméra.</p>";
+        });
+    });
+}
+
+captureBtn.addEventListener("click", () => {
+  const context = canvas.getContext("2d");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+  localStorage.setItem("carteCantine", dataURL);
+  captureBtn.style.display = "none";
+  afficherCarte(dataURL);
+});
+
+backMenuBtn.addEventListener("click", () => {
+  window.location.href = "index.html";
+});
+
+function afficherCarte(dataURL) {
+  cardContainer.innerHTML = `<img src="${dataURL}" alt="Carte Cantine">`;
+  cardContainer.appendChild(backMenuBtn);
+  cardContainer.style.display = "flex";
+  cameraContainer.style.display = "none";
+}
+
+function openPronote() {
+  let opened = false;
+  window.location = "pronote://";
+  setTimeout(() => {
+    if(!opened) window.location = "https://0330023w.index-education.net/pronote/eleve.html";
+  }, 500);
+}
+
+// Lancement
+init();
+</script>
+
+</body>
+</html>
