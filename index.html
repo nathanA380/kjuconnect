@@ -18,25 +18,31 @@ body {
     background: linear-gradient(135deg, #DBFCFF 0%, #F9F9F9 100%);
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
     color: #1c1c1c;
 }
 
-/* Container */
 .container {
     max-width: 600px;
-    margin: 0 auto;
-    padding-bottom: 100px; /* espace pour navbar */
-    padding-top: 30px;
+    width: 100%;
+    padding: 20px;
+    padding-bottom: 120px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
 }
 
-/* Glass Card */
 .card {
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(18px);
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-    margin: 20px;
-    padding: 25px;
+    padding: 28px;
     text-align: center;
     transition: transform 0.25s ease;
 }
@@ -53,11 +59,11 @@ body {
 
 .card p {
     font-size: 1rem;
-    margin: 10px 0 0 0;
+    margin: 12px 0 0 0;
     color: #333;
+    line-height: 1.5;
 }
 
-/* Boutons */
 .btn {
     display: inline-block;
     padding: 12px 28px;
@@ -79,7 +85,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Images */
 img {
     max-width: 100px;
     margin: 15px;
@@ -88,7 +93,6 @@ img {
     background: #fff;
 }
 
-/* Navbar flottante en verre */
 .navbar {
     position: fixed;
     bottom: 20px;
@@ -131,7 +135,6 @@ img {
 <body>
 
 <div class="container">
-
     <div class="card">
         <h2>Bienvenue sur KJU Connect</h2>
         <p>Tout ce dont tu as besoin pour ton lycée en une seule application web !</p>
@@ -142,12 +145,10 @@ img {
 
     <div class="card">
         <h2>Installation</h2>
-        <p>Ajoute KJU Connect à ton écran d'accueil en cliquant sur partager, puis "Sur l'écran d'accueil".</p>
+        <p>Ajoute KJU Connect à ton écran d'accueil en cliquant sur <strong>Partager</strong>, puis <strong>"Sur l'écran d'accueil"</strong>.</p>
     </div>
-
 </div>
 
-<!-- Navbar fixe -->
 <div class="navbar">
     <a href="cl.html">
         <span>🎓</span>
@@ -168,7 +169,6 @@ img {
 </div>
 
 <script>
-// Ouvrir l'app Pronote si possible
 function openPronote() {
     let opened = false;
     window.location = "pronote://";
@@ -177,7 +177,6 @@ function openPronote() {
     }, 500);
 }
 
-// Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
