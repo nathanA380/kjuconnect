@@ -10,58 +10,78 @@
     src: url(Agrandir-Regular.otf) format('opentype');
   }
 
-  :root {
-    --bg1: #DBFCFF;
-    --bg2: #E56399;
-    --card-bg: rgba(255, 255, 255, 0.25);
-    --text: #1c1c1c;
-  }
-
-  html, body {
+  body {
+    font-family: 'agrandir', sans-serif;
+    background: linear-gradient(135deg, #DBFCFF, #7F96FF);
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: 'agrandir', sans-serif;
-    background: linear-gradient(135deg, var(--bg1), var(--bg2));
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    height: 100vh;
   }
 
-  .redirect-box {
-    background: var(--card-bg);
-    backdrop-filter: blur(14px);
-    padding: 30px 50px;
+  .card {
+    background: rgba(255, 255, 255, 0.25);
     border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 40px;
     text-align: center;
-    animation: zoomFade 0.8s ease forwards;
+    max-width: 350px;
+    animation: fadeIn 1s ease;
   }
 
-  .redirect-box p {
-    font-size: 22px;
-    font-weight: 600;
-    margin: 0;
-    color: var(--text);
+  h1 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    color: #333;
   }
 
-  @keyframes zoomFade {
-    from { opacity: 0; transform: scale(0.9) translateY(15px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
+  p {
+    font-size: 1em;
+    margin-bottom: 25px;
+    color: #444;
+  }
+
+  .progress-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0;
+    background: #7F96FF;
+    animation: loadProgress 3s forwards;
+  }
+
+  @keyframes loadProgress {
+    to { width: 100%; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
 <script>
-  // Redirection automatique après 1,5s
   setTimeout(() => {
-    window.location.href = "soon.html";
-  }, 1500);
+    window.location.href = "index.html"; // Redirige après 3 secondes
+  }, 3000);
 </script>
 </head>
 <body>
-  <div class="redirect-box">
-    <p>Redirection en cours…</p>
+  <div class="card">
+    <h1>Redirection...</h1>
+    <p>Merci de patienter un instant</p>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
   </div>
 </body>
 </html>
