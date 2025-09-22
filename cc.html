@@ -16,24 +16,44 @@
     width: 100%;
     height: 100%;
     font-family: 'agrandir', sans-serif;
-    background: #DBFCFF;
+    background: linear-gradient(135deg, #DBFCFF 0%, #F9F9F9 100%);
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  p {
-    font-size: 24px;
+  .redirect-box {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
+    padding: 25px 40px;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    animation: fadeIn 0.8s ease forwards;
+  }
+
+  .redirect-box p {
+    font-size: 22px;
     color: #1c1c1c;
-    font-weight: bold;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
 <script>
-  // Remplace "soon.html" par le fichier ou l'URL vers laquelle tu veux rediriger
-  window.location.href = "soon.html";
+  // Redirection automatique
+  setTimeout(() => {
+    window.location.href = "soon.html";
+  }, 1500); // délai 1,5 sec pour voir le message
 </script>
 </head>
 <body>
-  <p>Redirection en cours…</p>
+  <div class="redirect-box">
+    <p>Redirection en cours…</p>
+  </div>
 </body>
 </html>
