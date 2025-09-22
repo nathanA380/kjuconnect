@@ -15,98 +15,94 @@
 
 body {
     font-family: 'agrandir', sans-serif;
-    background: #DBFCFF;
+    background: linear-gradient(135deg, #DBFCFF 0%, #F9F9F9 100%);
     margin: 0;
     padding: 0;
     color: #1c1c1c;
 }
 
-/* Container principal pour le contenu au-dessus de la navbar */
+/* Container */
 .container {
     max-width: 600px;
     margin: 0 auto;
-    padding-bottom: 80px; /* espace pour navbar */
-    padding-top: 20px;
+    padding-bottom: 100px; /* espace pour navbar */
+    padding-top: 30px;
 }
 
-/* Brutalist Card */
+/* Glass Card */
 .card {
-    background: #fff;
-    border-radius: 18px 50px 12px 30px;
-    box-shadow: 6px 6px 0px #1c1c1c;
-    margin: 15px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(18px);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    margin: 20px;
     padding: 25px;
     text-align: center;
-    border: 3px solid #1c1c1c;
-    transition: transform 0.15s ease-in-out;
+    transition: transform 0.25s ease;
 }
 
 .card:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 9px 9px 0px #1c1c1c;
+    transform: translateY(-5px);
 }
 
 .card h2 {
     margin-top: 0;
-    font-size: 1.6rem;
-    color: #E56399;
+    font-size: 1.5rem;
+    color: #62C370;
 }
 
 .card p {
-    font-size: 0.95rem;
+    font-size: 1rem;
     margin: 10px 0 0 0;
+    color: #333;
 }
 
 /* Boutons */
 .btn {
     display: inline-block;
-    padding: 12px 22px;
-    background: #62C370;
-    color: #fff;
-    border: 3px solid #1c1c1c;
-    border-radius: 10px 25px 6px 20px;
+    padding: 12px 28px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
+    color: #1c1c1c;
+    border-radius: 12px;
     text-decoration: none;
     font-size: 16px;
     cursor: pointer;
-    margin-top: 15px;
-    font-weight: bold;
-    box-shadow: 4px 4px 0px #1c1c1c;
-    transition: transform 0.15s ease-in-out, background 0.2s;
+    margin-top: 18px;
+    font-weight: 600;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
 }
 
 .btn:hover {
-    background: #7F96FF;
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0px #1c1c1c;
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
 }
 
-.btn:active {
-    background: #FFBE0B;
-    transform: translate(1px, 1px);
-    box-shadow: 2px 2px 0px #1c1c1c;
-}
-
-/* Images dans les cartes */
+/* Images */
 img {
-    max-width: 120px;
-    margin: 12px;
-    border: 3px solid #1c1c1c;
-    border-radius: 12px 28px 8px 18px;
-    box-shadow: 5px 5px 0px #1c1c1c;
+    max-width: 100px;
+    margin: 15px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
     background: #fff;
 }
 
-/* Navbar mobile */
+/* Navbar flottante en verre */
 .navbar {
     position: fixed;
-    bottom: 0;
-    width: 100%;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 520px;
     display: flex;
     justify-content: space-around;
-    background: #fff;
-    border-top: 3px solid #1c1c1c;
-    box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
-    padding: 10px 0;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px);
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    padding: 12px 0;
     z-index: 1000;
 }
 
@@ -117,13 +113,14 @@ img {
     justify-content: center;
     color: #1c1c1c;
     text-decoration: none;
-    font-weight: bold;
     font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
 .navbar a span {
-    font-size: 20px; /* pour emoji/icône */
-    margin-bottom: 3px;
+    font-size: 20px;
+    margin-bottom: 4px;
 }
 
 .navbar a:hover {
@@ -145,7 +142,8 @@ img {
 
     <div class="card">
         <h2>Installation</h2>
-        <p>Ajoute KJU Connect à ton écran d'accueil en cliquant sur partager, puis "sur l'écran d'accueil</p>
+        <p>Ajoute KJU Connect à ton écran d'accueil en cliquant sur partager, puis "Sur l'écran d'accueil".</p>
+    </div>
 
 </div>
 
