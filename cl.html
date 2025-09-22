@@ -1,43 +1,153 @@
 <!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte Lycéen</title>
+<style>
+  @font-face {
+    font-family: 'agrandir';
+    src: url(Agrandir-Regular.otf) format('opentype');
+  }
 
+  :root {
+    --bg: linear-gradient(135deg, #dbeafe 0%, #fdf2f8 100%);
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --accent: #007aff;
+    --accent-2: #ff4d6d;
+    --text: #1d1d1f;
+    --muted: #86868b;
+    --radius: 20px;
+  }
 
-.navbar a {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-color: var(--text);
-text-decoration: none;
-font-size: 13px;
-font-weight: 500;
-transition: color 0.3s ease;
-}
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'agrandir', sans-serif;
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text);
+  }
 
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+  }
 
-.navbar a:hover {
-color: var(--accent);
-}
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  #photoContainer {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3/2;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: var(--radius);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  canvas.visible {
+    opacity: 1;
+  }
+
+  #takePhoto {
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  #takePhoto:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+
+  .navbar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    justify-content: space-around;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    padding: 12px 0;
+    z-index: 20;
+  }
+
+  .navbar a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .navbar a:hover {
+    color: var(--accent);
+  }
 </style>
 </head>
 <body>
 
-
 <main>
-<h1>Carte Lycéen</h1>
-<div id="photoContainer">
-<canvas id="photoCanvas"></canvas>
-</div>
-<button id="takePhoto">📸 Prendre une photo</button>
-<!-- capture obligatoire par appareil photo -->
-<input type="file" accept="image/*" capture="camera" id="cameraInput" style="display:none;">
+  <h1>Carte Lycéen</h1>
+  <div id="photoContainer">
+    <canvas id="photoCanvas"></canvas>
+  </div>
+  <button id="takePhoto">📸 Prendre une photo</button>
+  <!-- capture obligatoire par appareil photo -->
+  <input type="file" accept="image/*" capture="camera" id="cameraInput" style="display:none;">
 </main>
 
-
 <div class="navbar">
-<a href="cl.html">Carte Lycéen</a>
-<a href="cc.html">Carte Cantine</a>
-<a href="#" onclick="openPronote()">EDT / Pronote</a>
-<a href="soon.html">Mémos</a>
+  <a href="cl.html">Carte Lycéen</a>
+  <a href="cc.html">Carte Cantine</a>
+  <a href="#" onclick="openPronote()">EDT / Pronote</a>
+  <a href="soon.html">Mémos</a>
 </div>
 <script>
 const cameraInput = document.getElementById("cameraInput");
@@ -84,5 +194,6 @@ function openPronote() {
 
 </body>
 </html>
+
 
 
