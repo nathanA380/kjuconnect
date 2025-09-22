@@ -3,86 +3,222 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Redirection</title>
+<title>Carte Cantine</title>
 <style>
   @font-face {
     font-family: 'agrandir';
     src: url(Agrandir-Regular.otf) format('opentype');
   }
 
-  body {
-    font-family: 'agrandir', sans-serif;
-    background: linear-gradient(135deg, #DBFCFF, #7F96FF);
+  :root {
+    --bg: linear-gradient(135deg, #fff4e6 0%, #ffe6f0 100%);
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --accent: #ff7f50;
+    --accent-2: #ff4d6d;
+    --text: #1d1d1f;
+    --muted: #86868b;
+    --radius: 20px;
+  }
+
+  html, body {
     margin: 0;
     padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'agrandir', sans-serif;
+    background: var(--bg);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    color: var(--text);
+    flex-direction: column;
   }
 
-  .card {
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 40px;
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
     text-align: center;
-    max-width: 350px;
-    animation: fadeIn 1s ease;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
   }
 
   h1 {
-    font-size: 1.8em;
-    margin-bottom: 15px;
-    color: #333;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  p {
-    font-size: 1em;
-    margin-bottom: 25px;
-    color: #444;
-  }
-
-  .progress-container {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 10px;
+  #photoContainer {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    height: 80vh;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
-    margin-bottom: 20px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
   }
 
-  .progress-bar {
+  #photoContainer img, canvas {
+    width: 100%;
     height: 100%;
-    width: 0;
-    background: #7F96FF;
-    animation: loadProgress 3s forwards;
+    object-fit: cover;
+    border-radius: var(--radius);
   }
 
-  @keyframes loadProgress {
-    to { width: 100%; }
+  #takePhoto {
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  #takePhoto:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+
+  .navbar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    justify-content: space-around;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    padding: 12px 0;
+    z-index: 20;
+  }
+
+  .navbar a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .navbar a:hover {
+    color: var(--accent);
   }
 </style>
-<script>
-  setTimeout(() => {
-    window.location.href = "soon.html"; // Redirige après 3 secondes
-  }, 1500);
-</script>
 </head>
 <body>
-  <div class="card">
-    <h1>Redirection...</h1>
-    <p>Merci de patienter un instant</p>
-    <div class="progress-container">
-      <div class="progress-bar"></div>
-    </div>
+
+<main>
+  <h1>Carte Cantine</h1>
+  <div id="photoContainer">
+    <canvas id="photoCanvas"></canvas>
   </div>
+  <button id="takePhoto">📸 Prendre une photo</button>
+  <input type="file" accept="image/*" capture="camera" id="cameraInput" style="display:none;">
+</main>
+
+<div class="navbar">
+  <a href="cl.html">Carte Lycéen</a>
+  <a href="cc.html">Carte Cantine</a>
+  <a href="#" onclick="openPronote()">EDT / Pronote</a>
+  <a href="soon.html">Mémos</a>
+</div>
+
+<script>
+const cameraInput = document.getElementById("cameraInput");
+const takePhotoBtn = document.getElementById("takePhoto");
+const photoContainer = document.getElementById("photoContainer");
+const canvas = document.getElementById("photoCanvas");
+const ctx = canvas.getContext("2d");
+const storageKey = "carteCantine";
+
+// Ouvre la caméra
+takePhotoBtn.addEventListener("click", () => cameraInput.click());
+
+// Fonction pour compresser l'image
+function compressImage(file, maxSizeMB, callback) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      let [width, height] = [img.width, img.height];
+      const scale = Math.min(1, Math.sqrt((maxSizeMB*1024*1024)/(file.size)));
+      width *= scale;
+      height *= scale;
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // Ajuste la qualité pour rester < 1 Mo
+      let quality = 0.9;
+      function toDataURL() {
+        const dataURL = canvas.toDataURL("image/jpeg", quality);
+        const size = Math.round((dataURL.length*3/4)/1024); // en KB
+        if(size > 1024 && quality > 0.1){
+          quality -= 0.05;
+          toDataURL();
+        } else {
+          callback(dataURL);
+        }
+      }
+      toDataURL();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Quand la photo est prise
+cameraInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if(file){
+    compressImage(file, 1, dataURL => {
+      localStorage.setItem(storageKey, dataURL);
+      photoContainer.innerHTML = `<img src="${dataURL}">`;
+      takePhotoBtn.style.display = "none";
+    });
+  }
+});
+
+// Vérifie si une photo existe déjà au chargement
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem(storageKey);
+  if(saved){
+    photoContainer.innerHTML = `<img src="${saved}">`;
+    takePhotoBtn.style.display = "none";
+  }
+});
+
+// Ouvre Pronote
+function openPronote() {
+  let opened = false;
+  window.location = "pronote://";
+  setTimeout(() => {
+    if(!opened) window.location = "https://0330023w.index-education.net/pronote/eleve.html";
+  }, 500);
+}
+</script>
+
 </body>
 </html>
-
