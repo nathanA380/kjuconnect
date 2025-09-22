@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fonctionnalité Bientôt</title>
 <style>
-  @font-face {
+@font-face {
     font-family: 'agrandir';
     src: url(Agrandir-Regular.otf) format('opentype');
-  }
+}
 
-  body, html {
+body, html {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -20,39 +20,38 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
-  }
+}
 
-  .box {
+.box {
     background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(18px);
     border-radius: 20px;
     padding: 40px 30px;
     max-width: 420px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    text-align: center;
     animation: fadeIn 0.8s ease forwards;
-  }
+}
 
-  .emoji {
+.emoji {
     font-size: 3.5rem;
     margin-bottom: 15px;
-    animation: bounce 1.2s infinite alternate ease-in-out;
-  }
+}
 
-  h1 {
+h1 {
     font-size: 2rem;
-    color: #7F96FF;
+    color: #62C370;
     margin-bottom: 12px;
-  }
+}
 
-  p {
+p {
     font-size: 1.1rem;
     color: #1c1c1c;
     margin-bottom: 25px;
     line-height: 1.5;
-  }
+}
 
-  button {
+button {
     padding: 12px 28px;
     border: none;
     border-radius: 14px;
@@ -64,31 +63,26 @@
     color: #1c1c1c;
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
-  }
+}
 
-  button:hover {
+button:hover {
     background: rgba(255, 255, 255, 0.4);
     transform: translateY(-2px);
-  }
+}
 
-  @keyframes bounce {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-12px); }
-  }
-
-  @keyframes fadeIn {
+@keyframes fadeIn {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
-  }
+}
 </style>
 </head>
 <body>
 
 <div class="box">
-  <div class="emoji">🚀</div>
-  <h1>Hey !</h1>
-  <p>On bosse dur pour toi…<br>Cette fonctionnalité débarque très bientôt !<br>Reste dans le coin, ça va valoir le coup 😎</p>
-  <button onclick="window.location.href='index.html'">🏠 Retour au menu</button>
+    <div class="emoji">🚀</div>
+    <h1>Hey !</h1>
+    <p>On bosse dur pour toi…<br>Cette fonctionnalité débarque très bientôt !<br>Reste dans le coin, ça va valoir le coup 😎</p>
+    <button onclick="window.location.href='index.html'">🏠 Retour au menu</button>
 </div>
 
 </body>
