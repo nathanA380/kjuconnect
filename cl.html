@@ -31,6 +31,7 @@
     justify-content: center;
     align-items: center;
     color: var(--text);
+    flex-direction: column;
   }
 
   main {
@@ -55,8 +56,9 @@
 
   #photoContainer {
     position: relative;
-    width: 100%;
-    aspect-ratio: 3/2;
+    width: 90%;
+    max-width: 400px;
+    height: 80vh;
     background: var(--card-bg);
     border-radius: var(--radius);
     display: flex;
@@ -66,17 +68,11 @@
     box-shadow: 0 6px 24px rgba(0,0,0,0.1);
   }
 
-  canvas {
+  #photoContainer img, canvas {
     width: 100%;
     height: 100%;
-    display: block;
+    object-fit: cover;
     border-radius: var(--radius);
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-
-  canvas.visible {
-    opacity: 1;
   }
 
   #takePhoto {
@@ -139,10 +135,8 @@
     <canvas id="photoCanvas"></canvas>
   </div>
   <button id="takePhoto">📸 Prendre une photo</button>
-  <!-- capture obligatoire par appareil photo -->
   <input type="file" accept="image/*" capture="camera" id="cameraInput" style="display:none;">
 </main>
-
 <div class="navbar">
   <a href="cl.html">Carte Lycéen</a>
   <a href="cc.html">Carte Cantine</a>
@@ -194,6 +188,7 @@ function openPronote() {
 
 </body>
 </html>
+
 
 
 
