@@ -1,113 +1,43 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carte Lycéen</title>
-<style>
-  @font-face {
-    font-family: 'agrandir';
-    src: url(Agrandir-Regular.otf) format('opentype');
-  }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: 'agrandir', sans-serif;
-    background: linear-gradient(135deg, #DBFCFF 0%, #F9F9F9 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
 
-  #photoContainer {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.navbar a {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+color: var(--text);
+text-decoration: none;
+font-size: 13px;
+font-weight: 500;
+transition: color 0.3s ease;
+}
 
-  #photoContainer img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
 
-  #takePhoto {
-    position: absolute;
-    z-index: 10;
-    padding: 14px 28px;
-    font-size: 18px;
-    font-weight: 600;
-    border-radius: 18px;
-    border: none;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(12px);
-    color: #1c1c1c;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-  }
-
-  #takePhoto:hover {
-    background: rgba(255, 255, 255, 0.35);
-    transform: translateY(-2px);
-  }
-
-  .navbar {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 500px;
-    display: flex;
-    justify-content: space-around;
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-    padding: 12px 0;
-    z-index: 20;
-  }
-
-  .navbar a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #1c1c1c;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-
-  .navbar a span {
-    font-size: 20px;
-    margin-bottom: 4px;
-  }
-
-  .navbar a:hover {
-    color: #62C370;
-  }
+.navbar a:hover {
+color: var(--accent);
+}
 </style>
 </head>
 <body>
 
-<button id="takePhoto">📸 Prendre ma Carte Lycéen</button>
-<div id="photoContainer"></div>
-<input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none;">
+
+<main>
+<h1>Carte Lycéen</h1>
+<div id="photoContainer">
+<canvas id="photoCanvas"></canvas>
+</div>
+<button id="takePhoto">📸 Prendre une photo</button>
+<!-- capture obligatoire par appareil photo -->
+<input type="file" accept="image/*" capture="camera" id="cameraInput" style="display:none;">
+</main>
+
 
 <div class="navbar">
-  <a href="cl.html"><span>🎓</span>Carte Lycéen</a>
-  <a href="cc.html"><span>🍽️</span>Carte Cantine</a>
-  <a href="#" onclick="openPronote()"><span>📚</span>EDT / Pronote</a>
-  <a href="soon.html"><span>📝</span>Mémos</a>
+<a href="cl.html">Carte Lycéen</a>
+<a href="cc.html">Carte Cantine</a>
+<a href="#" onclick="openPronote()">EDT / Pronote</a>
+<a href="soon.html">Mémos</a>
 </div>
 <script>
 const cameraInput = document.getElementById("cameraInput");
@@ -154,4 +84,5 @@ function openPronote() {
 
 </body>
 </html>
+
 
