@@ -1,7 +1,7 @@
 {
   "name": "KJU Connect",
   "short_name": "KJU",
-  "start_url": "./index.html",
+  "start_url": "./cl.html",
   "display": "standalone",
   "background_color": "#DBFCFF",
   "theme_color": "#62C370",
@@ -18,3 +18,4 @@
     }
   ]
 }
+
