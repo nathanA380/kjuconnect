@@ -10,198 +10,203 @@
     src: url(Agrandir-Regular.otf) format('opentype');
   }
 
-  :root {
-    --bg: linear-gradient(135deg, #fff4e6 0%, #ffe6f0 100%);
-    --card-bg: rgba(255, 255, 255, 0.8);
-    --accent: #ff7f50;
-    --accent-2: #ff4d6d;
-    --text: #1d1d1f;
-    --muted: #86868b;
-    --radius: 20px;
-  }
-
   html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
     font-family: 'agrandir', sans-serif;
-    background: var(--bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--text);
-    flex-direction: column;
-  }
-
-  main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    text-align: center;
-    width: 100%;
-    max-width: 500px;
-    padding: 20px;
-  }
-
-  h1 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin: 0;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  #photoContainer {
-    position: relative;
-    width: 90%;
-    max-width: 400px;
-    height: 80vh;
-    background: var(--card-bg);
-    border-radius: var(--radius);
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    color: #f5f5f5;
   }
 
-  #photoContainer img, canvas {
+  #photoContainer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+  }
+
+  #photoContainer img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    border-radius: var(--radius);
+    object-fit: contain;
+    border-radius: 22px;
+    box-shadow: 0 12px 45px rgba(0,0,0,0.55);
+    animation: fadeIn 0.6s ease;
   }
 
   #takePhoto {
+    position: absolute;
+    z-index: 10;
     padding: 14px 28px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
-    border-radius: 14px;
+    border-radius: 50px;
     border: none;
     cursor: pointer;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: white;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+    color: #ffffffcc;
+    transition: all 0.3s ease;
   }
 
   #takePhoto:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    transform: scale(1.05);
+    background: rgba(255,255,255,0.15);
+    color: #fff;
   }
 
   .navbar {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 500px;
-    display: flex;
-    justify-content: space-around;
-    background: var(--card-bg);
-    backdrop-filter: blur(20px);
-    border-radius: var(--radius);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-    padding: 12px 0;
-    z-index: 20;
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 72px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(40, 40, 40, 0.85); /* + opaque */
+  backdrop-filter: blur(18px);
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,0.15); /* fin contour clair */
+  box-shadow: 0 12px 35px rgba(0,0,0,0.65); /* ombre plus marquée */
+  z-index: 10;
+}
+
+
+  .navbar a img {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
+  .navbar a img:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 20px rgba(255,255,255,0.2);
+  }
+  
   .navbar a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .navbar a:hover {
-    color: var(--accent);
+.navbar a.active::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45), inset 0 0 12px rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.settings {
+  position: fixed;
+  top: 8px; /* remonte un peu */
+  left: 5px;
+  z-index: 15; /* derrière le bouton photo qui est à z-index:10 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+
+}
+.settings img {
+  width: 58px;
+  height: 58px;
+  opacity: 0.85;
+}
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.97);}
+    to {opacity: 1; transform: scale(1);}
   }
 </style>
 </head>
 <body>
 
-<main>
-  <h1>Carte Cantine</h1>
-  <div id="photoContainer">
-    <canvas id="photoCanvas"></canvas>
-  </div>
-  <button id="takePhoto">📸 Prendre une photo</button>
-  <input type="file" accept="image/*" capture="camera" id="cameraInput" style="display:none;">
-</main>
+<button id="takePhoto">📸 Prendre ma Carte Cantine</button>
+<div id="photoContainer"></div>
+<input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none;">
 
+<!-- Navbar -->
 <div class="navbar">
-  <a href="cl.html">Carte Lycéen</a>
-  <a href="cc.html">Carte Cantine</a>
-  <a href="#" onclick="openPronote()">EDT / Pronote</a>
-  <a href="soon.html">Mémos</a>
+  <a href="cl.html"><img src="badge-id.png"></a>
+  <a href="cc.html"  class="active"><img src="lunch.png"></a>
+  <a href="soon c.html"><img src="clock.png"></a>
+  <a href="soon m.html"><img src="reminders.png"></a>
+</div>
+
+<div class="settings">
+  <a href="soon h.html"><img src="settings.png"></a>
 </div>
 
 <script>
 const cameraInput = document.getElementById("cameraInput");
 const takePhotoBtn = document.getElementById("takePhoto");
 const photoContainer = document.getElementById("photoContainer");
-const canvas = document.getElementById("photoCanvas");
-const ctx = canvas.getContext("2d");
 const storageKey = "carteCantine";
 
-// Ouvre la caméra
 takePhotoBtn.addEventListener("click", () => cameraInput.click());
 
-// Fonction pour compresser l'image
-function compressImage(file, maxSizeMB, callback) {
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      let [width, height] = [img.width, img.height];
-      const scale = Math.min(1, Math.sqrt((maxSizeMB*1024*1024)/(file.size)));
-      width *= scale;
-      height *= scale;
-      canvas.width = width;
-      canvas.height = height;
-      ctx.drawImage(img, 0, 0, width, height);
-      
-      // Ajuste la qualité pour rester < 1 Mo
-      let quality = 0.9;
-      function toDataURL() {
-        const dataURL = canvas.toDataURL("image/jpeg", quality);
-        const size = Math.round((dataURL.length*3/4)/1024); // en KB
-        if(size > 1024 && quality > 0.1){
-          quality -= 0.05;
-          toDataURL();
-        } else {
-          callback(dataURL);
-        }
-      }
-      toDataURL();
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-// Quand la photo est prise
 cameraInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
   if(file){
-    compressImage(file, 1, dataURL => {
-      localStorage.setItem(storageKey, dataURL);
-      photoContainer.innerHTML = `<img src="${dataURL}">`;
-      takePhotoBtn.style.display = "none";
-    });
+    const reader = new FileReader();
+    reader.onload = e => {
+      const dataURL = e.target.result;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxWidth = 1024;
+        const maxHeight = 1024;
+        let width = img.width;
+        let height = img.height;
+
+        // conserver les proportions
+        if(width > height && width > maxWidth){
+          height = height * (maxWidth / width);
+          width = maxWidth;
+        } else if(height >= width && height > maxHeight){
+          width = width * (maxHeight / height);
+          height = maxHeight;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // convertir en JPEG compressé
+        const smallDataURL = canvas.toDataURL('image/jpeg', 0.7);
+        localStorage.setItem(storageKey, smallDataURL);
+        photoContainer.innerHTML = `<img src="${smallDataURL}">`;
+        takePhotoBtn.style.display = "none";
+      };
+      img.src = dataURL;
+    };
+    reader.readAsDataURL(file);
   }
 });
 
-// Vérifie si une photo existe déjà au chargement
 window.addEventListener("load", () => {
   const saved = localStorage.getItem(storageKey);
   if(saved){
@@ -209,15 +214,6 @@ window.addEventListener("load", () => {
     takePhotoBtn.style.display = "none";
   }
 });
-
-// Ouvre Pronote
-function openPronote() {
-  let opened = false;
-  window.location = "pronote://";
-  setTimeout(() => {
-    if(!opened) window.location = "https://0330023w.index-education.net/pronote/eleve.html";
-  }, 500);
-}
 </script>
 
 </body>
