@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paramètres</title>
+<style>
+  @font-face {
+    font-family: 'agrandir';
+    src: url(Agrandir-Regular.otf) format('opentype');
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    font-family: 'agrandir', sans-serif;
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #f5f5f5;
+  }
+
+  .container {
+    width: 90%;
+    max-width: 500px;
+    padding: 24px;
+    margin-top: 50px;
+    border-radius: 22px;
+    background: rgba(40, 40, 40, 0.85);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.65);
+    text-align: center;
+  }
+
+  h1 {
+    margin-bottom: 24px;
+    font-size: 28px;
+    background: linear-gradient(45deg, #ffffff, #bbbbbb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  h3 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 22px;
+    color: #ffffffcc;
+  }
+
+  input[type="text"], input[type="file"] {
+    width: 80%;
+    padding: 10px 12px;
+    margin: 10px 0;
+    border-radius: 14px;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 16px;
+    backdrop-filter: blur(10px);
+    transition: background 0.3s;
+  }
+
+  input[type="text"]:focus {
+    background: rgba(255,255,255,0.15);
+    outline: none;
+  }
+
+  button {
+    padding: 12px 24px;
+    margin: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px);
+    color: #ffffffcc;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+
+  #profileDisplay {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+
+  #profilePhoto {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 10px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+  }
+
+  .navbar {
+    position: fixed;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 72px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(40, 40, 40, 0.85);
+    backdrop-filter: blur(18px);
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.65);
+    z-index: 10;
+  }
+
+  .navbar a img {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .navbar a img:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 20px rgba(255,255,255,0.2);
+  }
+
+  .msg {
+    margin-top: 20px;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .msg.visible {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Paramètres</h1>
+
+  <h3>Profil</h3>
+  <input type="text" id="inputName" placeholder="Votre nom complet">
+  <input type="file" id="inputPhoto" accept="image/*" capture="environment">
+  <button id="saveProfile">Enregistrer le profil</button>
+  
+  <div id="profileDisplay"></div>
+  <img id="profilePhoto" src="" alt="" style="display:none;">
+
+  <h3>Cartes</h3>
+  <button id="deleteCard">🪪 Supprimer la carte lycéen</button>
+  <button id="deleteLunchCard">🍽️ Supprimer la carte cantine</button>
+
+  <div id="message" class="msg"></div>
+</div>
+
+<div class="navbar">
+  <a href="cl.html"><img src="badge-id.png" alt="Carte Lycéen"></a>
+  <a href="cc.html"><img src="lunch.png" alt="Carte Cantine"></a>
+  <a href="hp.html"><img src="clock.png" alt="Horaires"></a>
+  <a href="soon m.html"><img src="reminders.png" alt="Mémos"></a>
+</div>
+
+<script>
+const storageKeyCard = "carteLycéen";
+const storageKeyLunch = "carteCantine";
+const storageKeyProfile = "profilLycéen";
+const storageKeyPhoto = "profilPhoto";
+
+const inputName = document.getElementById("inputName");
+const inputPhoto = document.getElementById("inputPhoto");
+const saveProfileBtn = document.getElementById("saveProfile");
+const profileDisplay = document.getElementById("profileDisplay");
+const profilePhoto = document.getElementById("profilePhoto");
+const deleteCardBtn = document.getElementById("deleteCard");
+const deleteLunchCardBtn = document.getElementById("deleteLunchCard");
+const messageBox = document.getElementById("message");
+
+// Fonction message animé
+function showMessage(text, color="#66ff99") {
+  messageBox.textContent = text;
+  messageBox.style.color = color;
+  messageBox.classList.add("visible");
+  setTimeout(() => messageBox.classList.remove("visible"), 2500);
+}
+
+// Charger les données sauvegardées
+window.addEventListener("load", () => {
+  const savedProfile = localStorage.getItem(storageKeyProfile);
+  const savedPhoto = localStorage.getItem(storageKeyPhoto);
+
+  if(savedProfile){
+    profileDisplay.textContent = "Nom : " + savedProfile;
+    inputName.value = savedProfile;
+  }
+  if(savedPhoto){
+    profilePhoto.src = savedPhoto;
+    profilePhoto.style.display = "block";
+  }
+});
+
+// Enregistrer le profil
+saveProfileBtn.addEventListener("click", () => {
+  const name = inputName.value.trim();
+  if(name){
+    localStorage.setItem(storageKeyProfile, name);
+    profileDisplay.textContent = "Nom : " + name;
+  }
+
+  const file = inputPhoto.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = e => {
+      const dataURL = e.target.result;
+      localStorage.setItem(storageKeyPhoto, dataURL);
+      profilePhoto.src = dataURL;
+      profilePhoto.style.display = "block";
+    };
+    reader.readAsDataURL(file);
+  }
+
+  showMessage("✅ Profil enregistré !");
+});
+
+// Supprimer la carte lycéen
+deleteCardBtn.addEventListener("click", () => {
+  localStorage.removeItem(storageKeyCard);
+  showMessage("🗑️ Carte lycéen supprimée !");
+});
+
+// Supprimer la carte de cantine
+deleteLunchCardBtn.addEventListener("click", () => {
+  localStorage.removeItem(storageKeyLunch);
+  showMessage("🍽️ Carte cantine supprimée !");
+});
+</script>
+
+</body>
+</html>

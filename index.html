@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte Lycéen</title>
+<style>
+  @font-face {
+    font-family: 'agrandir';
+    src: url(Agrandir-Regular.otf) format('opentype');
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'agrandir', sans-serif;
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: #f5f5f5;
+  }
+
+  #photoContainer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+  }
+
+  #photoContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 22px;
+    box-shadow: 0 12px 45px rgba(0,0,0,0.55);
+    animation: fadeIn 0.6s ease;
+  }
+
+  #takePhoto {
+    position: absolute;
+    z-index: 10;
+    padding: 14px 28px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+    color: #ffffffcc;
+    transition: all 0.3s ease;
+  }
+
+  #takePhoto:hover {
+    transform: scale(1.05);
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+
+  .navbar {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 72px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(40, 40, 40, 0.85); /* + opaque */
+  backdrop-filter: blur(18px);
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,0.15); /* fin contour clair */
+  box-shadow: 0 12px 35px rgba(0,0,0,0.65); /* ombre plus marquée */
+  z-index: 10;
+}
+
+
+  .navbar a img {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .navbar a img:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 20px rgba(255,255,255,0.2);
+  }
+  
+  .navbar a {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar a.active::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45), inset 0 0 12px rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+
+.settings {
+  position: fixed;
+  top: 8px; /* remonte un peu */
+  left: 5px;
+  z-index: 15; /* derrière le bouton photo qui est à z-index:10 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+
+}
+.settings img {
+  width: 58px;
+  height: 58px;
+  opacity: 0.85;
+}
+
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.97);}
+    to {opacity: 1; transform: scale(1);}
+  }
+</style>
+</head>
+<body>
+
+<button id="takePhoto">📸 Prendre ma Carte Lycéen</button>
+<div id="photoContainer"></div>
+<input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none;">
+
+<!-- Navbar -->
+<div class="navbar">
+  <a href="cl.html" class="active"><img src="badge-id.png"></a>
+  <a href="cc.html"><img src="lunch.png"></a>
+  <a href="clock.html"><img src="clock.png"></a>
+  <a href="soon m.html"><img src="reminders.png"></a>
+</div>
+
+<div class="settings">
+  <a href="soon c.html"><img src="settings.png"></a>
+</div>
+
+<script>
+const cameraInput = document.getElementById("cameraInput");
+const takePhotoBtn = document.getElementById("takePhoto");
+const photoContainer = document.getElementById("photoContainer");
+const storageKey = "carteLycéen";
+
+takePhotoBtn.addEventListener("click", () => cameraInput.click());
+
+cameraInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = e => {
+      const dataURL = e.target.result;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxWidth = 1024;
+        const maxHeight = 1024;
+        let width = img.width;
+        let height = img.height;
+
+        // conserver les proportions
+        if(width > height && width > maxWidth){
+          height = height * (maxWidth / width);
+          width = maxWidth;
+        } else if(height >= width && height > maxHeight){
+          width = width * (maxHeight / height);
+          height = maxHeight;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // convertir en JPEG compressé
+        const smallDataURL = canvas.toDataURL('image/jpeg', 0.7);
+        localStorage.setItem(storageKey, smallDataURL);
+        photoContainer.innerHTML = `<img src="${smallDataURL}">`;
+        takePhotoBtn.style.display = "none";
+      };
+      img.src = dataURL;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+window.addEventListener("load", () => {
+  const saved = localStorage.getItem(storageKey);
+  if(saved){
+    photoContainer.innerHTML = `<img src="${saved}">`;
+    takePhotoBtn.style.display = "none";
+  }
+});
+</script>
+
+</body>
+</html>

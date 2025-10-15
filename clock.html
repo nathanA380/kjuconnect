@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horaires du Portail</title>
+<style>
+  @font-face {
+    font-family: 'agrandir';
+    src: url(Agrandir-Regular.otf) format('opentype');
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'agrandir', sans-serif;
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    color: #f5f5f5;
+  }
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    max-height: 100vh; /* hauteur max de la fenêtre */
+    padding: 24px;
+    border-radius: 22px;
+    background: rgba(40, 40, 40, 0.85);
+
+    backdrop-filter: blur(14px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.65);
+    text-align: center;
+    margin-bottom: 90px; /* ✅ espace sous le tableau pour éviter d'être caché */
+   
+}
+
+
+  h1 {
+    margin-bottom: 24px;
+    font-size: 28px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 18px;
+  }
+
+  th, td {
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+
+  th {
+    text-align: left;
+    font-weight: 600;
+    color: #ffffffcc;
+  }
+
+  td {
+    color: #f5f5f5;
+  }
+
+  .navbar {
+    position: fixed;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 72px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(40, 40, 40, 0.85);
+    backdrop-filter: blur(18px);
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.65);
+    z-index: 10;
+  }
+
+  .navbar a img {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .navbar a img:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 20px rgba(255,255,255,0.2);
+  }
+
+  .navbar a {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .navbar a.active::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    width: calc(100% + 16px);
+    height: calc(100% + 16px);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45), inset 0 0 12px rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+    z-index: -1;
+  }
+
+  .settings {
+    position: fixed;
+    top: 8px;
+    left: 5px;
+    z-index: 15;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+  .settings img {
+    width: 58px;
+    height: 58px;
+    opacity: 0.85;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Horaires du Portail</h1>
+  <table>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <td>07:30 - 08:15</td>
+      <td>08:50 - 09:10</td>
+    </tr>
+    <tr>
+      <td>09:50 - 10:15</td>
+      <td>11:00 - 11:15</td>
+    </tr>
+    <tr>
+      <td>11:50 - 12:15</td>
+      <td>12:25 - 12:35</td>
+    </tr>
+    <tr>
+      <td>12:50 - 13:10</td>
+      <td>13:25 - 13:35</td>
+    </tr>
+    <tr>
+      <td>13:50 - 14:10</td>
+      <td>14:25 - 14:35</td>
+    </tr>
+    <tr>
+      <td>14:55 - 15:10</td>
+      <td>15:55 - 16:15</td>
+    </tr>
+    <tr>
+      <td>17:00 - 17:10</td>
+      <td>17:25 - 17:35</td>
+    </tr>
+    <tr>
+      <td>18:05 - 18:20</td>
+      <td></td>
+    </tr>
+  </table>
+</div>
+
+
+<div class="navbar">
+  <a href="cl.html"><img src="badge-id.png"></a>
+  <a href="cc.html"><img src="lunch.png"></a>
+  <a href="hp.html" class="active"><img src="clock.png"></a>
+  <a href="soon m.html"><img src="reminders.png"></a>
+</div>
+
+<div class="settings">
+  <a href="settings.html"><img src="settings.png"></a>
+</div>
+
+</body>
+</html>

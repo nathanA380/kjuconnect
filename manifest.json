@@ -1,0 +1,21 @@
+{
+  "name": "KJU Connect",
+  "short_name": "KJU",
+  "start_url": "./cl.html",
+  "display": "standalone",
+  "background_color": "#DBFCFF",
+  "theme_color": "#62C370",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
