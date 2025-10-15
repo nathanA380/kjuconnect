@@ -33,6 +33,10 @@
     backdrop-filter: blur(14px);
     box-shadow: 0 12px 35px rgba(0,0,0,0.65);
     text-align: center;
+      max-height: calc(100vh - 100px); /* 100px = hauteur approximative de la navbar + marge */
+  overflow-y: auto; /* pour que le contenu puisse défiler si trop long */
+  padding-bottom: 100px; /* espace sous les boutons pour que la navbar ne les cache pas */
+    
   }
 
   h1 {
@@ -151,7 +155,7 @@
 
   <h3>Profil</h3>
   <input type="text" id="inputName" placeholder="Votre nom complet">
-  <input type="file" id="inputPhoto" accept="image/*" capture="environment">
+  <input type="file" id="inputPhoto" accept="image/*">
   <button id="saveProfile">Enregistrer le profil</button>
   
   <div id="profileDisplay"></div>
